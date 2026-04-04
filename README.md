@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FinTrack — Finance Dashboard UI
 
-## Getting Started
+A modern, interactive personal finance dashboard built with **Next.js 16**, **TypeScript**, **Tailwind CSS v4**, **Recharts**, and **Framer Motion**.
 
-First, run the development server:
+---
+
+## 🚀 Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install dependencies
+pnpm install   # or npm install / yarn
+
+# Start development server
 pnpm dev
-# or
-bun dev
+
+# Open in browser
+http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Dashboard Overview
+- **4 Summary Cards** — Total Balance, Total Income, Total Expenses, Savings Rate
+- **Balance Trend Chart** — Area chart showing income vs expenses over 6 months (Recharts)
+- **Spending Breakdown** — Donut pie chart by category with color-coded legend
+- **Recent Transactions** — Quick preview of the 5 latest transactions
 
-## Learn More
+### 2. Transactions Section
+- Full **sortable table** — click Date or Amount column headers to sort
+- **Search** by description or category (live filtering)
+- **Filter** by type (income/expense), category dropdown, and date range
+- **Admin only** — Add Transaction button with modal form + Edit/Delete per row
+- **Empty state** — graceful message when filters return no results
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Role-Based UI (RBAC Simulation)
+Switch roles using the dropdown in the top-right header:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Feature | Viewer | Admin |
+|---|---|---|
+| View all pages & charts | ✅ | ✅ |
+| View transactions | ✅ | ✅ |
+| Add transactions | ❌ | ✅ |
+| Edit / Delete transactions | ❌ | ✅ |
+| Export CSV | ❌ | ✅ |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Insights Section
+- **Smart observation banner** — auto-detects significant M/M spending changes
+- **Top Spending Category** card
+- **Expense Ratio** and **Savings Rate** insight cards
+- **Month-over-Month** income and expense comparison
+- **Monthly Bar Chart** — grouped bar chart by month (Recharts)
+- **Category Ranking** — animated progress bars for top 5 expense categories
 
-## Deploy on Vercel
+### 5. State Management
+Single `AppContext` using React `useReducer`:
+- Transactions data (53 mock entries across 10 categories, 6 months)
+- Active filters (search, type, category, date range, sort)
+- Selected role (admin/viewer)
+- Theme preference (dark/light)
+- **Persisted to `localStorage`** — state survives page refresh
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 Design System
+
+| Token | Value |
+|---|---|
+| Font | Inter (Google Fonts) |
+| Dark background | `#0b0f1a` |
+| Accent | Violet `#7c3aed` → Indigo `#6366f1` |
+| Glass cards | `rgba(255,255,255,0.04)` + `backdrop-blur` |
+| Income color | Emerald `#10b981` |
+| Expense color | Rose `#f43f5e` |
+
+---
+
+## ⚙️ Optional Enhancements Implemented
+
+- ✅ **Dark mode** (full coverage, toggle in header, persisted)
+- ✅ **Local storage persistence** (transactions, role, theme)
+- ✅ **CSV export** (Admin only — exports filtered transactions)
+- ✅ **Animations** (Framer Motion for card entrances, modal, sidebar drawer)
+- ✅ **Responsive design** (mobile sidebar drawer, collapsible table columns)
+
+---
+
+## 🏗️ Project Structure
+
+```
+src/
+├── app/
+│   ├── dashboard/page.tsx     # Overview
+│   ├── transactions/page.tsx  # Transaction list
+│   ├── insights/page.tsx      # Analytics
+│   ├── layout.tsx             # Root layout + providers
+│   └── globals.css            # Design tokens
+├── components/
+│   ├── layout/                # Sidebar, Header, AppShell
+│   ├── dashboard/             # SummaryCard, charts
+│   ├── transactions/          # Table, Filters, Modal
+│   ├── insights/              # InsightCard, MonthlyChart
+│   └── ui/                    # Badge, Button, Modal, EmptyState
+├── context/
+│   └── AppContext.tsx          # State + reducer + selector hooks
+├── data/
+│   └── mockData.ts            # 53 mock transactions + category colors
+├── lib/
+│   └── utils.ts               # cn, formatCurrency, formatDate, exportToCSV
+└── types/
+    └── index.ts               # TypeScript interfaces
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Dependency | Purpose |
+|---|---|
+| Next.js 16 | Framework (App Router) |
+| TypeScript | Type safety |
+| Tailwind CSS v4 | Styling |
+| Recharts | Charts (Area, Pie, Bar) |
+| Framer Motion | Animations |
+| Lucide React | Icons |
+| clsx + tailwind-merge | Class utility |
+
+---
+
+## 📋 Assignment Requirements Coverage
+
+| Requirement | Status |
+|---|---|
+| Dashboard — summary cards | ✅ |
+| Time-based visualization | ✅ Area chart (6 months) |
+| Categorical visualization | ✅ Donut pie chart |
+| Transaction list with date/amount/category/type | ✅ |
+| Filtering & search | ✅ |
+| Role-based UI (Admin/Viewer) | ✅ |
+| Insights section | ✅ |
+| State management | ✅ Context + useReducer |
+| Responsive design | ✅ |
+| Empty state handling | ✅ |
+| Dark mode | ✅ |
+| Local storage persistence | ✅ |
+| CSV export | ✅ |
+| Animations | ✅ |
